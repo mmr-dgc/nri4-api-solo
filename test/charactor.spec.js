@@ -100,7 +100,17 @@ describe("Disney API Server", () => {
   });
 
   describe("create", () => {
-    describe("Post /api/charactors", () => {
+    afterEach(async () => {
+      // データの削除
+      await Promise.all(
+        tables.map(
+          async (table) =>
+            await knex.from(table).where("charactor_id", 99999).del()
+        )
+      );
+      await knex.from("charactor").where("id", 99999).del();
+    });
+    describe("POST /api/charactors", () => {
       it("return status 200", async () => {
         // リクエスト情報
         const body = {
@@ -143,10 +153,60 @@ describe("Disney API Server", () => {
         await Promise.all(
           tables.map(
             async (table) =>
-              await knex.from(table).where("charactor_id", body.id).del(),
-          ),
+              await knex.from(table).where("charactor_id", body.id).del()
+          )
         );
         await knex.from("charactor").where("id", body.id).del();
+      });
+    });
+  });
+
+  describe("delete", () => {
+    afterEach(async () => {
+      // データの削除
+      await Promise.all(
+        tables.map(
+          async (table) =>
+            await knex.from(table).where("charactor_id", 99999).del()
+        )
+      );
+      await knex.from("charactor").where("id", 99999).del();
+    });
+    beforeEach(async () => {
+      // データの削除
+      // リクエスト情報
+      const body = {
+        id: 99999,
+        films: ["Hercules (film)"],
+        shortFilms: [],
+        tvShows: ["Hercules (TV series)"],
+        videoGames: ["Kingdom Hearts III"],
+        parkAttractions: [],
+        allies: [],
+        enemies: [],
+        sourceUrl: "https://disney.fandom.com/wiki/Achilles_(Hercules)",
+        name: "Achilles",
+        imageUrl:
+          "https://static.wikia.nocookie.net/disney/images/d/d3/Vlcsnap-2015-05-06-23h04m15s601.png",
+      };
+
+      // データの作成
+      await chai.request(server).post("/api/charactors").send(body);
+    });
+    describe("DELETE /api/charactors", () => {
+      it("return status 200", async () => {
+        // APIを呼び出す
+        const res = await request.delete("/api/charactors/99999");
+
+        // 結果の確認
+        res.should.have.status(200);
+
+        // データの確認
+        const charactor = await knex
+          .select("*")
+          .from("charactor")
+          .where("id", body.id);
+        charactor.should.deep.equal([]);
       });
     });
   });
