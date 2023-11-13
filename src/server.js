@@ -210,6 +210,89 @@ const setupServer = () => {
     res.status(200).json([charactorInfo]);
   });
 
+  app.post("/api/charactors", async (req, res) => {
+    const body = req.body;
+    await knex.transaction(async (trx) => {
+      await trx("charactor").insert({
+        id: body.id,
+        name: body.name,
+        source_url: body.sourceUrl,
+        image_url: body.imageUrl,
+      });
+
+      await Promise.all(
+        body.films.map(
+          async (film) =>
+            await trx("film").insert({
+              charactor_id: body.id,
+              name: film,
+            }),
+        ),
+      );
+
+      await Promise.all(
+        body.shortFilms.map(
+          async (shortFilm) =>
+            await trx("shortFilm").insert({
+              charactor_id: body.id,
+              name: shortFilm,
+            }),
+        ),
+      );
+
+      await Promise.all(
+        body.tvShows.map(
+          async (tvShow) =>
+            await trx("tvShow").insert({
+              charactor_id: body.id,
+              name: tvShow,
+            }),
+        ),
+      );
+
+      await Promise.all(
+        body.videoGames.map(
+          async (videoGame) =>
+            await trx("videoGame").insert({
+              charactor_id: body.id,
+              name: videoGame,
+            }),
+        ),
+      );
+
+      await Promise.all(
+        body.parkAttractions.map(
+          async (parkAttraction) =>
+            await trx("parkAttraction").insert({
+              charactor_id: body.id,
+              name: parkAttraction,
+            }),
+        ),
+      );
+
+      await Promise.all(
+        body.allies.map(
+          async (allie) =>
+            await trx("allie").insert({
+              charactor_id: body.id,
+              name: allie,
+            }),
+        ),
+      );
+
+      await Promise.all(
+        body.enemies.map(
+          async (enemie) =>
+            await trx("enemie").insert({
+              charactor_id: body.id,
+              name: enemie,
+            }),
+        ),
+      );
+    });
+    res.sendStatus(200);
+  });
+
   return app;
 };
 
