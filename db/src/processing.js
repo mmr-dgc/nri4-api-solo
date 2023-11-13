@@ -47,7 +47,7 @@ const charactor = data.map((row) => {
 });
 fs.writeFileSync(
   __dirname + "\\..\\data\\charactor.json",
-  JSON.stringify({ data: charactor })
+  JSON.stringify({ data: charactor }),
 );
 
 // 各テーブルの作成
@@ -83,31 +83,31 @@ data.forEach((row) => {
 });
 fs.writeFileSync(
   __dirname + "\\..\\data\\film.json",
-  JSON.stringify({ data: film })
+  JSON.stringify({ data: film }),
 );
 fs.writeFileSync(
   __dirname + "\\..\\data\\shortFilm.json",
-  JSON.stringify({ data: shortFilm })
+  JSON.stringify({ data: shortFilm }),
 );
 fs.writeFileSync(
   __dirname + "\\..\\data\\tvShow.json",
-  JSON.stringify({ data: tvShow })
+  JSON.stringify({ data: tvShow }),
 );
 fs.writeFileSync(
   __dirname + "\\..\\data\\videoGame.json",
-  JSON.stringify({ data: videoGame })
+  JSON.stringify({ data: videoGame }),
 );
 fs.writeFileSync(
   __dirname + "\\..\\data\\parkAttraction.json",
-  JSON.stringify({ data: parkAttraction })
+  JSON.stringify({ data: parkAttraction }),
 );
 fs.writeFileSync(
   __dirname + "\\..\\data\\allie.json",
-  JSON.stringify({ data: allie })
+  JSON.stringify({ data: allie }),
 );
 fs.writeFileSync(
   __dirname + "\\..\\data\\enemie.json",
-  JSON.stringify({ data: enemie })
+  JSON.stringify({ data: enemie }),
 );
 
 console.log("----データ作成完了----");

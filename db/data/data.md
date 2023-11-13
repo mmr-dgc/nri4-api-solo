@@ -5,6 +5,7 @@
 本プロジェクトで利用するデータは下記から取得。
 
 - [Disney API](https://disneyapi.dev/)の[キャラクター情報取得API](https://api.disneyapi.dev/character)を利用。
+- 取得データは7438件(https://api.disneyapi.dev/character?pageSize=7438)
 
 上記APIのレスポンスデータの内容を[db/data/apidata.json](./apidata.json)に記載。
 

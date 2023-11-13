@@ -9,11 +9,11 @@ const setupServer = () => {
   app.use(express.json());
   app.use(express.text());
 
-  app.get("/healthcheck", (req, res) => {
-    res.send("I am alive.");
+  app.get("/api/healthcheck", (req, res) => {
+    res.status(200).send("I am alive.");
   });
 
-  app.get("/healthcheckForDB", async (req, res) => {
+  app.get("/api/healthcheckForDB", async (req, res) => {
     const charactor = await knex
       .select({
         id: "id",
@@ -21,7 +21,7 @@ const setupServer = () => {
       })
       .from("charactor")
       .limit(10);
-    res.json(charactor);
+    res.status(200).json(charactor);
   });
 
   return app;
