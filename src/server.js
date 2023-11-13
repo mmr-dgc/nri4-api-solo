@@ -1,5 +1,14 @@
 const express = require("express");
 const knex = require("./knex");
+const tables = [
+  "film",
+  "shortFilm",
+  "tvShow",
+  "videoGame",
+  "parkAttraction",
+  "allie",
+  "enemie",
+];
 
 const setupServer = () => {
   /**
@@ -289,6 +298,19 @@ const setupServer = () => {
             }),
         ),
       );
+    });
+    res.sendStatus(200);
+  });
+
+  app.delete("/api/charactors/:id", async (req, res) => {
+    const id = req.params.id;
+    await knex.transaction(async (trx) => {
+      await Promise.all(
+        tables.map(
+          async (table) => await trx(table).where("charactor_id", id).del(),
+        ),
+      );
+      await trx("charactor").where("id", id).del();
     });
     res.sendStatus(200);
   });
