@@ -10,7 +10,7 @@
 
 ## データの加工
 
-[apidata.json](./apidata.json)を[db/src/processing.js](../src/processing.js/)で加工し、以下のDB用のデータを作成。
+[apidata.json](./apidata.json)を[db/src/processing.js](../src/processing.js)で加工し、以下のDB用のデータを作成。
 
 - hogehoge
 - hogehoge
