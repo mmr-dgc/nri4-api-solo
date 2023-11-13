@@ -127,7 +127,7 @@ id={キャラクターID}
 ]
 ```
 
-### 更新
+### 作成
 
 - メソッド
 
@@ -216,4 +216,48 @@ id={キャラクターID}
 なし
 ```
 
-### 作成
+### 更新
+
+- メソッド
+
+```
+PATCH
+```
+
+- パス
+
+```
+/api/charactors
+```
+
+- パスパラメータ
+
+```
+なし
+```
+
+- クエリパラメータ
+
+```
+なし
+```
+
+- リクエストボディ
+
+```
+      {
+        id: 99999, // 必須
+        allies: [],
+        enemies: [],
+        sourceUrl: "https://disney.fandom.com/wiki/Achilles_(Hercules)",
+        name: "Achilles",
+        imageUrl:
+          "https://static.wikia.nocookie.net/disney/images/d/d3/Vlcsnap-2015-05-06-23h04m15s601.png",
+      }
+```
+
+- レスポンスボディ
+
+```
+なし
+```
