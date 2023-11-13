@@ -47,7 +47,7 @@ const charactor = data.map((row) => {
 });
 fs.writeFileSync(
   __dirname + "\\..\\data\\charactor.json",
-  JSON.stringify(charactor)
+  JSON.stringify({ data: charactor })
 );
 
 // 各テーブルの作成
@@ -81,21 +81,33 @@ data.forEach((row) => {
     enemie.push({ charactor_id: row._id, name: innerrow });
   });
 });
-fs.writeFileSync(__dirname + "\\..\\data\\film.json", JSON.stringify(film));
+fs.writeFileSync(
+  __dirname + "\\..\\data\\film.json",
+  JSON.stringify({ data: film })
+);
 fs.writeFileSync(
   __dirname + "\\..\\data\\shortFilm.json",
-  JSON.stringify(shortFilm)
+  JSON.stringify({ data: shortFilm })
 );
-fs.writeFileSync(__dirname + "\\..\\data\\tvShow.json", JSON.stringify(tvShow));
+fs.writeFileSync(
+  __dirname + "\\..\\data\\tvShow.json",
+  JSON.stringify({ data: tvShow })
+);
 fs.writeFileSync(
   __dirname + "\\..\\data\\videoGame.json",
-  JSON.stringify(videoGame)
+  JSON.stringify({ data: videoGame })
 );
 fs.writeFileSync(
   __dirname + "\\..\\data\\parkAttraction.json",
-  JSON.stringify(parkAttraction)
+  JSON.stringify({ data: parkAttraction })
 );
-fs.writeFileSync(__dirname + "\\..\\data\\allie.json", JSON.stringify(allie));
-fs.writeFileSync(__dirname + "\\..\\data\\enemie.json", JSON.stringify(enemie));
+fs.writeFileSync(
+  __dirname + "\\..\\data\\allie.json",
+  JSON.stringify({ data: allie })
+);
+fs.writeFileSync(
+  __dirname + "\\..\\data\\enemie.json",
+  JSON.stringify({ data: enemie })
+);
 
 console.log("----データ作成完了----");
