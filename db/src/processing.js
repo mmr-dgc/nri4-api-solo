@@ -40,9 +40,9 @@ console.log(tablesDescription);
 const charactor = data.map((row) => {
   return {
     id: row._id,
-    sourceUrl: row.sourceUrl,
     name: row.name,
-    imageUrl: row.imageUrl,
+    source_url: row.sourceUrl,
+    image_url: row.imageUrl,
   };
 });
 fs.writeFileSync(
@@ -60,25 +60,25 @@ const allie = [];
 const enemie = [];
 data.forEach((row) => {
   row.films.forEach((innerrow) => {
-    film.push({ id: row._id, name: innerrow });
+    film.push({ charactor_id: row._id, name: innerrow });
   });
   row.shortFilms.forEach((innerrow) => {
-    shortFilm.push({ id: row._id, name: innerrow });
+    shortFilm.push({ charactor_id: row._id, name: innerrow });
   });
   row.tvShows.forEach((innerrow) => {
-    tvShow.push({ id: row._id, name: innerrow });
+    tvShow.push({ charactor_id: row._id, name: innerrow });
   });
   row.videoGames.forEach((innerrow) => {
-    videoGame.push({ id: row._id, name: innerrow });
+    videoGame.push({ charactor_id: row._id, name: innerrow });
   });
   row.parkAttractions.forEach((innerrow) => {
-    parkAttraction.push({ id: row._id, name: innerrow });
+    parkAttraction.push({ charactor_id: row._id, name: innerrow });
   });
   row.allies.forEach((innerrow) => {
-    allie.push({ id: row._id, name: innerrow });
+    allie.push({ charactor_id: row._id, name: innerrow });
   });
   row.enemies.forEach((innerrow) => {
-    enemie.push({ id: row._id, name: innerrow });
+    enemie.push({ charactor_id: row._id, name: innerrow });
   });
 });
 fs.writeFileSync(__dirname + "\\..\\data\\film.json", JSON.stringify(film));
