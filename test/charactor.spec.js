@@ -25,7 +25,7 @@ describe("Disney API Server", () => {
 
         // 結果の確認
         res.should.have.status(200);
-        res.text.should.deep.equal("I am alive.");
+        res.text.should.equal("I am alive.");
       });
     });
   });
@@ -34,11 +34,11 @@ describe("Disney API Server", () => {
     describe("GET /api/charactors", () => {
       it("return status 200 and allcharactors", async () => {
         // APIを呼び出す
-        const res = await request.get("/api/charactors");
+        const res = await request.get("/api/charactors").query({ limit: 5 });
 
         // 結果の確認
         res.should.have.status(200);
-        JSON.parse(res.text).should.deep.equal(data);
+        JSON.parse(res.text).should.deep.equal(data.slice(0, 5));
       });
     });
 
@@ -48,13 +48,15 @@ describe("Disney API Server", () => {
         const res = await request.get("/api/charactors/112");
 
         // 想定レスポンス
-        const exp = {
-          id: 112,
-          name: "Achilles",
-          source_url: "https://disney.fandom.com/wiki/Achilles_(Hercules)",
-          image_url:
-            "https://static.wikia.nocookie.net/disney/images/d/d3/Vlcsnap-2015-05-06-23h04m15s601.png",
-        };
+        const exp = [
+          {
+            id: 112,
+            name: "Achilles",
+            source_url: "https://disney.fandom.com/wiki/Achilles_(Hercules)",
+            image_url:
+              "https://static.wikia.nocookie.net/disney/images/d/d3/Vlcsnap-2015-05-06-23h04m15s601.png",
+          },
+        ];
 
         // 結果の確認
         res.should.have.status(200);
