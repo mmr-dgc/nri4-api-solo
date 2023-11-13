@@ -1,4 +1,5 @@
 const express = require("express");
+const knex = require("./knex");
 
 const setupServer = () => {
   /**
@@ -10,6 +11,17 @@ const setupServer = () => {
 
   app.get("/healthcheck", (req, res) => {
     res.send("I am alive.");
+  });
+
+  app.get("/healthcheckForDB", async (req, res) => {
+    const charactor = await knex
+      .select({
+        id: "id",
+        name: "name",
+      })
+      .from("charactor")
+      .limit(10);
+    res.json(charactor);
   });
 
   return app;
