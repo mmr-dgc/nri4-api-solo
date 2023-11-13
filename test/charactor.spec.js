@@ -105,8 +105,8 @@ describe("Disney API Server", () => {
       await Promise.all(
         tables.map(
           async (table) =>
-            await knex.from(table).where("charactor_id", 99999).del()
-        )
+            await knex.from(table).where("charactor_id", 99999).del(),
+        ),
       );
       await knex.from("charactor").where("id", 99999).del();
     });
@@ -153,8 +153,8 @@ describe("Disney API Server", () => {
         await Promise.all(
           tables.map(
             async (table) =>
-              await knex.from(table).where("charactor_id", body.id).del()
-          )
+              await knex.from(table).where("charactor_id", body.id).del(),
+          ),
         );
         await knex.from("charactor").where("id", body.id).del();
       });
@@ -167,8 +167,8 @@ describe("Disney API Server", () => {
       await Promise.all(
         tables.map(
           async (table) =>
-            await knex.from(table).where("charactor_id", 99999).del()
-        )
+            await knex.from(table).where("charactor_id", 99999).del(),
+        ),
       );
       await knex.from("charactor").where("id", 99999).del();
     });
@@ -216,8 +216,8 @@ describe("Disney API Server", () => {
       await Promise.all(
         tables.map(
           async (table) =>
-            await knex.from(table).where("charactor_id", 99999).del()
-        )
+            await knex.from(table).where("charactor_id", 99999).del(),
+        ),
       );
       await knex.from("charactor").where("id", 99999).del();
     });

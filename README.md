@@ -247,8 +247,6 @@ PATCH
 ```
       {
         id: 99999, // 必須
-        allies: [],
-        enemies: [],
         sourceUrl: "https://disney.fandom.com/wiki/Achilles_(Hercules)",
         name: "Achilles",
         imageUrl:

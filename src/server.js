@@ -1,5 +1,6 @@
 const express = require("express");
 const knex = require("./knex");
+const _ = require("lodash");
 const tables = [
   "film",
   "shortFilm",
@@ -311,6 +312,32 @@ const setupServer = () => {
         ),
       );
       await trx("charactor").where("id", id).del();
+    });
+    res.sendStatus(200);
+  });
+
+  app.patch("/api/charactors", async (req, res) => {
+    const body = req.body;
+    await knex.transaction(async (trx) => {
+      const charactor = _.pick(body, ["id", "sourceUrl", "name", "imageUrl"]);
+      const preCharactor = await knex
+        .select({
+          id: "id",
+          name: "name",
+          source_url: "source_url",
+          image_url: "image_url",
+        })
+        .from("charactor")
+        .where("id", charactor.id)
+        .catch((e) => console.log(e));
+      await trx("charactor")
+        .where("id", charactor.id)
+        .update({
+          source_url: charactor.sourceUrl || preCharactor[0].source_url,
+          name: charactor.name || preCharactor[0].name,
+          image_url: charactor.imageUrl || preCharactor[0].image_url,
+        })
+        .catch((e) => console.log(e));
     });
     res.sendStatus(200);
   });
