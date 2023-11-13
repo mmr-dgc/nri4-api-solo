@@ -8,7 +8,7 @@
 docker-compose up -d
 ```
 
-以下コマンドでDBに接続し初期化を行う。
+以下コマンドでDBに接続する。
 
 ```
 docker exec -it nri4-api-solo-db-1 /bin/sh

@@ -3,6 +3,16 @@ const chaiHttp = require("chai-http");
 chai.use(chaiHttp);
 chai.should();
 const { setupServer } = require("../src/server");
+const knex = require("../src/knex");
+const tables = [
+  "film",
+  "shortFilm",
+  "tvShow",
+  "videoGame",
+  "parkAttraction",
+  "allie",
+  "enemie",
+];
 
 /*
  * This sprint you will have to create all tests yourself, TDD style.
@@ -113,6 +123,30 @@ describe("Disney API Server", () => {
 
         // 結果の確認
         res.should.have.status(200);
+
+        // データの確認
+        const charactor = await knex
+          .select("*")
+          .from("charactor")
+          .where("id", body.id);
+        charactor.should.deep.equal([
+          {
+            id: 99999,
+            source_url: "https://disney.fandom.com/wiki/Achilles_(Hercules)",
+            name: "Achilles",
+            image_url:
+              "https://static.wikia.nocookie.net/disney/images/d/d3/Vlcsnap-2015-05-06-23h04m15s601.png",
+          },
+        ]);
+
+        // データの削除
+        await Promise.all(
+          tables.map(
+            async (table) =>
+              await knex.from(table).where("charactor_id", body.id).del(),
+          ),
+        );
+        await knex.from("charactor").where("id", body.id).del();
       });
     });
   });
