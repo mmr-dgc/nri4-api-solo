@@ -247,6 +247,8 @@ describe("Disney API Server", () => {
         const body = {
           id: 99999,
           name: "Update",
+          tvShows: ["Update tvShows"],
+          videoGames: ["Update videoGames"],
         };
 
         // APIを呼び出す
@@ -256,11 +258,14 @@ describe("Disney API Server", () => {
         res.should.have.status(200);
 
         // データの確認
-        const charactor = await knex
-          .select("*")
-          .from("charactor")
-          .where("id", 99999);
-        charactor[0].name.should.deep.equal(body.name);
+        const charactor = await chai
+          .request(server)
+          .get("/api/charactors/99999");
+        JSON.parse(charactor.text)[0].name.should.deep.equal(body.name);
+        JSON.parse(charactor.text)[0].tvShows.should.deep.equal(body.tvShows);
+        JSON.parse(charactor.text)[0].videoGames.should.deep.equal(
+          body.videoGames,
+        );
       });
     });
   });
