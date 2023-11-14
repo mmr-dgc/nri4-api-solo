@@ -1,14 +1,16 @@
 const express = require("express");
 const knex = require("./knex");
-const tables = [
-  "film",
-  "shortFilm",
-  "tvShow",
-  "videoGame",
-  "parkAttraction",
-  "allie",
-  "enemie",
-];
+const _ = require("lodash");
+const tableKeyMappings = {
+  film: "films",
+  shortFilm: "shortFilms",
+  tvShow: "tvShows",
+  videoGame: "videoGames",
+  parkAttraction: "parkAttractions",
+  allie: "allies",
+  enemie: "enemies",
+};
+const tables = Object.keys(tableKeyMappings);
 
 const setupServer = () => {
   /**
@@ -23,16 +25,11 @@ const setupServer = () => {
   });
 
   app.get("/api/healthcheckForDB", async (req, res) => {
-    const charactor = await knex
-      .select({
-        id: "id",
-        name: "name",
-      })
-      .from("charactor")
-      .limit(10);
-    res.status(200).json(charactor);
+    const raw = await knex.raw("select 1 as result");
+    res.status(200).json(raw);
   });
 
+  // 取得(全件)
   app.get("/api/charactors", async (req, res) => {
     const limit = req.query.limit;
     // キャラクターの取得
@@ -135,6 +132,7 @@ const setupServer = () => {
     res.status(200).json(charactorInfos);
   });
 
+  // 取得(ID指定)
   app.get("/api/charactors/:id", async (req, res) => {
     const id = req.params.id;
     const charactor = await knex
@@ -219,6 +217,7 @@ const setupServer = () => {
     res.status(200).json([charactorInfo]);
   });
 
+  // 作成
   app.post("/api/charactors", async (req, res) => {
     const body = req.body;
     await knex.transaction(async (trx) => {
@@ -302,6 +301,7 @@ const setupServer = () => {
     res.sendStatus(200);
   });
 
+  // 削除
   app.delete("/api/charactors/:id", async (req, res) => {
     const id = req.params.id;
     await knex.transaction(async (trx) => {
@@ -311,6 +311,64 @@ const setupServer = () => {
         ),
       );
       await trx("charactor").where("id", id).del();
+    });
+    res.sendStatus(200);
+  });
+
+  // 更新
+  app.patch("/api/charactors", async (req, res) => {
+    const body = req.body;
+    await knex.transaction(async (trx) => {
+      const charactor = _.pick(body, ["id", "sourceUrl", "name", "imageUrl"]);
+      const preCharactor = await trx("charactor")
+        .select({
+          id: "id",
+          name: "name",
+          source_url: "source_url",
+          image_url: "image_url",
+        })
+        .where("id", charactor.id);
+
+      await trx("charactor")
+        .where("id", charactor.id)
+        .update({
+          source_url: charactor.sourceUrl || preCharactor[0].source_url,
+          name: charactor.name || preCharactor[0].name,
+          image_url: charactor.imageUrl || preCharactor[0].image_url,
+        });
+
+      await Promise.all(
+        tables.map(async (table) => {
+          const rows = await trx(table)
+            .select({
+              id: "id",
+              charactor_id: "charactor_id",
+              name: "name",
+            })
+            .where("charactor_id", charactor.id);
+
+          // 削除対象
+          const deleteTarget = rows
+            .filter(
+              (row) =>
+                !(body[tableKeyMappings[table]] || []).includes(row.name),
+            )
+            .map((row) => row.id);
+
+          // 作成対象
+          const createTarget = (body[tableKeyMappings[table]] || [])
+            .filter((name) => !rows.map((row) => row.name).includes(name))
+            .map((name) => {
+              return { charactor_id: charactor.id, name: name };
+            });
+          if (deleteTarget.length > 0) {
+            await trx(table).whereIn("id", deleteTarget).del();
+          }
+          if (createTarget.length > 0) {
+            await trx(table).insert(createTarget);
+          }
+        }),
+      ).catch((e) => console.log(e));
     });
     res.sendStatus(200);
   });
