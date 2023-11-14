@@ -10,8 +10,8 @@
     "lint": "eslint --fix --ext .js .",
     "migrate": "knex migrate:latest",
     "seed": "knex seed:run",
-    "preview": "marp $npm_config_src --theme ./theme/slide.scss --preview",
-    "pdf": "marp $npm_config_src --theme ./theme/slide.scss --pdf"
+    "preview": "marp $npm_config_src --theme ./slide/theme/slide.css --preview",
+    "pdf": "marp $npm_config_src --theme ./slide/theme/slide.css --pdf"
   },
   "husky": {
     "hooks": {
