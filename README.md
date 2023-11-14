@@ -1,3 +1,5 @@
+![GitHub repo size](https://img.shields.io/github/repo-size/mmr-dgc/nri4-api-solo)
+
 # nri4-api-solo
 
 ## 事前準備
