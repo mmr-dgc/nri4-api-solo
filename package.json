@@ -9,7 +9,9 @@
     "dev": "nodemon ./src/index.js",
     "lint": "eslint --fix --ext .js .",
     "migrate": "knex migrate:latest",
-    "seed": "knex seed:run"
+    "seed": "knex seed:run",
+    "preview": "marp $npm_config_src --theme ./theme/slide.scss --preview",
+    "pdf": "marp $npm_config_src --theme ./theme/slide.scss --pdf"
   },
   "husky": {
     "hooks": {
@@ -27,6 +29,7 @@
     "pg": "^8.11.3"
   },
   "devDependencies": {
+    "@marp-team/marp-cli": "^3.4.0",
     "chai": "^4.3.10",
     "chai-http": "^4.4.0",
     "eslint": "^8.53.0",
