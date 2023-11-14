@@ -17,7 +17,7 @@ jobs:
       - run: npm install
         working-directory: ./
 
-      - run: npm run dev
+      - run: nohup node ./src/index.js &
         working-directory: ./
 
       - run: npm test
