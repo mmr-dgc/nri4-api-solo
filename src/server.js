@@ -1,6 +1,9 @@
 const express = require("express");
+const swaggerUi = require("swagger-ui-express");
+const swaggerJSDoc = require("swagger-jsdoc");
 const knex = require("./knex");
 const _ = require("lodash");
+
 const tableKeyMappings = {
   film: "films",
   shortFilm: "shortFilms",
@@ -12,6 +15,16 @@ const tableKeyMappings = {
 };
 const tables = Object.keys(tableKeyMappings);
 
+const options = {
+  swaggerDefinition: {
+    info: {
+      title: "ディズニーAPI",
+      version: "1.0.0",
+    },
+  },
+  apis: ["./*.js"],
+};
+
 const setupServer = () => {
   /**
    * Create, set up and return your express server, split things into separate files if it becomes too long!
@@ -19,11 +32,13 @@ const setupServer = () => {
   const app = express();
   app.use(express.json());
   app.use(express.text());
+  app.use("/spec", swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(options)));
 
   app.get("/api/healthcheck", (req, res) => {
     res.status(200).send("I am alive.");
   });
 
+  // ヘルスチェック(DB疎通)
   app.get("/api/healthcheckForDB", async (req, res) => {
     const raw = await knex.raw("select 1 as result");
     res.status(200).json(raw);
@@ -234,8 +249,8 @@ const setupServer = () => {
             await trx("film").insert({
               charactor_id: body.id,
               name: film,
-            }),
-        ),
+            })
+        )
       );
 
       await Promise.all(
@@ -244,8 +259,8 @@ const setupServer = () => {
             await trx("shortFilm").insert({
               charactor_id: body.id,
               name: shortFilm,
-            }),
-        ),
+            })
+        )
       );
 
       await Promise.all(
@@ -254,8 +269,8 @@ const setupServer = () => {
             await trx("tvShow").insert({
               charactor_id: body.id,
               name: tvShow,
-            }),
-        ),
+            })
+        )
       );
 
       await Promise.all(
@@ -264,8 +279,8 @@ const setupServer = () => {
             await trx("videoGame").insert({
               charactor_id: body.id,
               name: videoGame,
-            }),
-        ),
+            })
+        )
       );
 
       await Promise.all(
@@ -274,8 +289,8 @@ const setupServer = () => {
             await trx("parkAttraction").insert({
               charactor_id: body.id,
               name: parkAttraction,
-            }),
-        ),
+            })
+        )
       );
 
       await Promise.all(
@@ -284,8 +299,8 @@ const setupServer = () => {
             await trx("allie").insert({
               charactor_id: body.id,
               name: allie,
-            }),
-        ),
+            })
+        )
       );
 
       await Promise.all(
@@ -294,8 +309,8 @@ const setupServer = () => {
             await trx("enemie").insert({
               charactor_id: body.id,
               name: enemie,
-            }),
-        ),
+            })
+        )
       );
     });
     res.sendStatus(200);
@@ -307,8 +322,8 @@ const setupServer = () => {
     await knex.transaction(async (trx) => {
       await Promise.all(
         tables.map(
-          async (table) => await trx(table).where("charactor_id", id).del(),
-        ),
+          async (table) => await trx(table).where("charactor_id", id).del()
+        )
       );
       await trx("charactor").where("id", id).del();
     });
@@ -350,8 +365,7 @@ const setupServer = () => {
           // 削除対象
           const deleteTarget = rows
             .filter(
-              (row) =>
-                !(body[tableKeyMappings[table]] || []).includes(row.name),
+              (row) => !(body[tableKeyMappings[table]] || []).includes(row.name)
             )
             .map((row) => row.id);
 
@@ -367,7 +381,7 @@ const setupServer = () => {
           if (createTarget.length > 0) {
             await trx(table).insert(createTarget);
           }
-        }),
+        })
       ).catch((e) => console.log(e));
     });
     res.sendStatus(200);
