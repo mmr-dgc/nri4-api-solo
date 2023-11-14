@@ -15,10 +15,10 @@ jobs:
           node-version: 18.17.1
 
       - run: npm install
-        working-directory: ./a
+        working-directory: /
 
       - run: npm run dev
-        working-directory: ./api
+        working-directory: /
 
       - run: npm test
-        working-directory: ./api
+        working-directory: /
